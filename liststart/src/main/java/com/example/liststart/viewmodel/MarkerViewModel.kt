@@ -8,7 +8,8 @@ import com.example.liststart.datasource.MarkerDataSource
 import com.example.liststart.model.Marker
 import kotlinx.coroutines.launch
 
-class MarkerViewModel(private val markerDataSource: MarkerDataSource) : ViewModel() {
+class
+MarkerViewModel(private val markerDataSource: MarkerDataSource) : ViewModel() {
 
     // Marker List
     private var markerItems: MutableList<Marker> = mutableListOf()
