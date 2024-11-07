@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@android:color/white"
+    tools:context=".view.Delivery">
+
+    <!-- 상단 로고 이미지 -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:src="@drawable/ikea_logo"
+        android:scaleType="centerCrop" />
+
+    <!-- 금일 출고 목록 텍스트 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@drawable/rounded_textbox"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:text="금일 출고 목록"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <!-- 상품 스캔 섹션 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="상품 스캔"
+            android:textSize="10sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp" />
+
+        <ImageView
+            android:id="@+id/Qrscanner"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_scan"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <!-- RecyclerView for displaying multiple items -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/warehouseRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+
+        android:layout_marginBottom="20dp"
+        tools:listitem="@layout/item_warehouse" />
+
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/rounded_button"
+
+
+        android:layout_marginBottom="20dp"
+        >
+
+        <ImageView
+            android:id="@+id/warehouseIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+
+            android:src="@drawable/ic_truck"
+            />
+        <TextView
+            android:id="@+id/selectWarehouseTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="출고"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            />
+
+
+    </LinearLayout>
+
+    <!-- 하단 네비게이션 바 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:background="#FFFFFF">
+
+        <!-- 상단 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" /> <!-- 검정색 가로 구분선 -->
+
+        <!-- 버튼 영역 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- 첫 번째 이미지 버튼 (홈) -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- 선택 표시를 위한 파란색 선 -->
+                <View
+                    android:id="@+id/leftIndicator"
+                    android:layout_width="50dp"
+                    android:layout_height="5dp"
+                    android:background="#B30058A3"
+                    android:visibility="visible" /> <!-- 기본적으로 숨김 -->
+
+                <!-- 아이콘 -->
+                <ImageView
+                    android:id="@+id/navImage1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_leftbutton"
+                    android:contentDescription="홈"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="12dp"
+                    android:scaleType="centerInside" />
+            </LinearLayout>
+
+            <!-- 버튼 사이 세로 구분선 -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#000000" /> <!-- 검정색 세로 구분선 -->
+
+            <!-- 두 번째 이미지 버튼 (설정) -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- 선택 표시를 위한 파란색 선 -->
+                <View
+                    android:id="@+id/rightIndicator"
+                    android:layout_width="50dp"
+                    android:layout_height="6dp"
+                    android:background="#B30058A3"
+                    android:visibility="gone" /> <!-- 기본적으로 숨김 -->
+
+                <!-- 아이콘 -->
+                <ImageView
+                    android:id="@+id/navImage2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_rightbutoon"
+                    android:contentDescription="설정"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="12dp"
+                    android:scaleType="centerInside" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

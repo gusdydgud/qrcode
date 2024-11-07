@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="horizontal"
+    android:layout_gravity="center"
+    android:padding="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp"
+    android:background="@drawable/rounded_listback"
+    android:layout_marginBottom="10dp">
+
+    <!-- 체크박스를 대체할 이미지뷰 추가 -->
+    <ImageView
+        android:id="@+id/warehouseItemCheckBox"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_unchecked"
+    android:layout_gravity="center_vertical"
+     />
+
+    <!-- 아이템 정보 레이아웃 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:paddingStart="20dp"> <!-- 이미지와 텍스트 간의 간격 설정 -->
+
+        <TextView
+            android:id="@+id/warehouseItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검정색 의자"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/warehouseItemDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100개"
+            android:textSize="14sp"
+            android:textColor="#CC083D80
+" />
+    </LinearLayout>
+
+</LinearLayout>
