@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 그림자 레이어 -->
+
+
+    <!-- 내부 레이어 -->
+    <item android:left="4dp" android:top="4dp" android:right="4dp" android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#330855A0" /> <!-- 배경색 (70% 불투명도) -->
+            <corners android:radius="16dp" /> <!-- 내부 둥근 모서리 반경 -->
+        </shape>
+    </item>
+
+</layer-list>

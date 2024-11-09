@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@android:color/white"
+    tools:context=".view.WarehouseList">
+
+    <!-- 상단 로고 이미지 -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:src="@drawable/ikea_logo"
+        android:scaleType="centerCrop"
+         />
+
+    <!-- 창고 선택 안내 버튼 -->
+    <LinearLayout
+        android:layout_width="330dp"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/selectWarehouseTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="창고를 선택해주세요"
+            android:textColor="@android:color/white"
+            android:textSize="23sp"
+            />
+
+        <ImageView
+            android:id="@+id/warehouseIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/ic_warehouse"
+            android:contentDescription="창고 아이콘" />
+    </LinearLayout>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="30dp"
+    >
+
+
+    <!-- 본사 창고 버튼 -->
+    <TextView
+        android:id="@+id/headOfficeWarehouseTextView"
+        android:layout_width="135dp"
+        android:layout_height="65dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="본사 창고"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_warehouse" />
+
+    <!-- 인천 창고 버튼 -->
+    <TextView
+        android:id="@+id/incheonWarehouseButton"
+        android:layout_width="135dp"
+        android:layout_height="65dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="인천 창고"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_warehouse" />
+
+     <!-- 부산 창고 버튼 -->
+    <TextView
+        android:id="@+id/busanWarehouseButton"
+        android:layout_width="135dp"
+        android:layout_height="65dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="부산 창고"
+        android:layout_gravity="center"
+
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_warehouse" />
+
+    <!-- 천안 창고 버튼 -->
+    <TextView
+        android:id="@+id/cheonanWarehouseButton"
+        android:layout_width="135dp"
+        android:layout_height="65dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="천안 창고"
+        android:layout_gravity="center"
+
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_warehouse" />
+</LinearLayout>
+</LinearLayout>
