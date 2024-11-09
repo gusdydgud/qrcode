@@ -12,7 +12,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object QRConstants {
 
-<<<<<<< HEAD
     private const val BASE_URL = "http://10.0.2.2:8787/dispatch/api/" // 변경된 IP 주소
 
     // GSON 인스턴스 (setLenient 추가)
@@ -20,16 +19,6 @@ object QRConstants {
         .setLenient()  // 이 옵션을 추가하여 JSON 파싱을 더 유연하게 합니다.
         .create()
 
-=======
-    private const val BASE_URL = "http://localhost:8787/dispatch/api/" // 변경된 아이피 주소
-
-    // GSON 인스턴스
-    private val gson = GsonBuilder()
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .create()
-
-    // Retrofit 인스턴스를 싱글톤으로 관리
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)

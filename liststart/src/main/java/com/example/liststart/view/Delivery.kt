@@ -6,32 +6,27 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
-<<<<<<< HEAD
+
 import androidx.activity.viewModels
-=======
-import androidx.annotation.OptIn
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-<<<<<<< HEAD
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.liststart.R
 import com.example.liststart.adapter.DispatchAdapter
 import com.example.liststart.viewmodel.DispatchViewModel
 import com.example.liststart.datasource.DataSourceProvider
-=======
-import com.example.liststart.R
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
+
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 
 class Delivery : AppCompatActivity() {
 
-<<<<<<< HEAD
+
     // CameraX와 관련된 변수
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var imageAnalysis: ImageAnalysis
@@ -45,27 +40,21 @@ class Delivery : AppCompatActivity() {
     private lateinit var dispatchAdapter: DispatchAdapter
     private lateinit var dispatchRecyclerView: RecyclerView
     private var warehouseNo: Int = 0 // 전달받을 창고 번호
-=======
-    private lateinit var cameraProvider: ProcessCameraProvider
-    private lateinit var imageAnalysis: ImageAnalysis
 
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delivery)
-<<<<<<< HEAD
+
 // 인텐트에서 창고 번호 받기
         warehouseNo = intent.getIntExtra("warehouse_no", 0)
         // QR 스캐너 버튼 설정
-=======
 
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
         val qrScannerButton = findViewById<ImageView>(R.id.Qrscanner)
         qrScannerButton.setOnClickListener {
             checkCameraPermissionAndOpenScanner()
         }
-<<<<<<< HEAD
+
 
         // RecyclerView 초기화 및 레이아웃 설정
         dispatchRecyclerView = findViewById(R.id.warehouseRecyclerView)
@@ -89,10 +78,7 @@ class Delivery : AppCompatActivity() {
 
 
     // 카메라 권한 확인 및 스캐너 열기
-=======
-    }
 
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
     private fun checkCameraPermissionAndOpenScanner() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
@@ -101,10 +87,9 @@ class Delivery : AppCompatActivity() {
         }
     }
 
-<<<<<<< HEAD
+
     // 카메라 시작 함수
-=======
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
+
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
@@ -113,10 +98,9 @@ class Delivery : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-<<<<<<< HEAD
+
     // QR 코드 분석기 바인딩
-=======
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
+
     private fun bindAnalyzer() {
         imageAnalysis = ImageAnalysis.Builder()
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -136,11 +120,10 @@ class Delivery : AppCompatActivity() {
         }
     }
 
-<<<<<<< HEAD
+
     // QR 코드 분석을 위한 함수
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
-=======
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
+
     @OptIn(ExperimentalGetImage::class)
     private fun processImageProxy(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
@@ -167,10 +150,9 @@ class Delivery : AppCompatActivity() {
         }
     }
 
-<<<<<<< HEAD
+
     // 카메라 권한 요청 결과 처리
-=======
->>>>>>> 3443f5f092f6b9bfd56a6e67cc8f12c502601a8f
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
