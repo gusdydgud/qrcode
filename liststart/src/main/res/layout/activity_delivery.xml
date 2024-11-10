@@ -52,7 +52,11 @@
             android:src="@drawable/ic_scan"
             android:layout_gravity="center" />
     </LinearLayout>
-
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraPreviewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
     <!-- RecyclerView for displaying multiple items -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/warehouseRecyclerView"

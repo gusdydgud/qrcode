@@ -5,12 +5,14 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +29,7 @@ class Delivery : AppCompatActivity() {
     // CameraX 관련 변수 초기화
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var imageAnalysis: ImageAnalysis
+    private lateinit var previewView: PreviewView // 프리뷰 표시할 뷰
 
     // ViewModel 초기화 (DataSourceProvider에서 ViewModelFactory 사용)
     private val dispatchViewModel: DispatchViewModel by viewModels {
@@ -45,7 +48,11 @@ class Delivery : AppCompatActivity() {
 
         // 인텐트에서 창고 번호 받기
         warehouseNo = intent.getIntExtra("warehouse_no", 0)
-        Log.d("myLog", "Received warehouseNo: $warehouseNo")  // 추가된 로그
+        Log.d("myLog", "Received warehouseNo: $warehouseNo")  // 받은 창고 번호 로그
+
+        // PreviewView 초기화 및 숨김 설정
+        previewView = findViewById(R.id.cameraPreviewView)
+        previewView.visibility = View.GONE // 기본적으로 숨겨둠
 
         // QR 스캐너 버튼 설정
         val qrScannerButton = findViewById<ImageView>(R.id.Qrscanner)
@@ -68,7 +75,7 @@ class Delivery : AppCompatActivity() {
     private fun observeDispatchList() {
         dispatchViewModel.dispatchList.observe(this) { dispatchList ->
             if (dispatchList != null && dispatchList.isNotEmpty()) {
-                dispatchAdapter.updateData(dispatchList)
+                dispatchAdapter.updateData(dispatchList) // RecyclerView에 데이터 갱신
                 Log.d("myLog", "Dispatch list updated with ${dispatchList.size} items")
             } else {
                 Log.e("myLog", "No data found or data is empty")
@@ -80,9 +87,20 @@ class Delivery : AppCompatActivity() {
     // 카메라 권한 확인 및 스캐너 열기
     private fun checkCameraPermissionAndOpenScanner() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            startCamera() // 카메라 권한이 있을 경우 카메라 시작
+            toggleCameraPreviewVisibility() // 카메라 프리뷰 표시
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+        }
+    }
+
+    // 카메라 프리뷰의 표시 상태를 토글 (보이기/숨기기)
+    private fun toggleCameraPreviewVisibility() {
+        if (previewView.visibility == View.GONE) {
+            previewView.visibility = View.VISIBLE
+            startCamera() // 카메라 시작
+        } else {
+            previewView.visibility = View.GONE
+            cameraProvider.unbindAll() // 카메라 정지
         }
     }
 
@@ -91,7 +109,24 @@ class Delivery : AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             cameraProvider = cameraProviderFuture.get()
-            bindAnalyzer() // 카메라 분석기 바인딩
+
+            // Preview 객체를 생성합니다.
+            val preview = Preview.Builder().build()
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            // PreviewView와 연결합니다.
+            preview.setSurfaceProvider(previewView.surfaceProvider)
+
+            // Analyzer 바인딩
+            bindAnalyzer()
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
+                Log.d("myLog", "Preview and Analyzer bound successfully")
+            } catch (e: Exception) {
+                Log.e("myLog", "Use case binding failed", e)
+            }
         }, ContextCompat.getMainExecutor(this))
     }
 
@@ -104,20 +139,10 @@ class Delivery : AppCompatActivity() {
         imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this)) { imageProxy ->
             processImageProxy(imageProxy) // QR 코드 분석 처리
         }
-
-        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-        try {
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(this, cameraSelector, imageAnalysis) // 분석기 라이프사이클에 바인딩
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     // QR 코드 분석을 위한 함수
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
-    @OptIn(ExperimentalGetImage::class)
     private fun processImageProxy(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
         if (mediaImage != null) {
@@ -127,8 +152,12 @@ class Delivery : AppCompatActivity() {
                 .addOnSuccessListener { barcodes ->
                     for (barcode in barcodes) {
                         val qrCodeData = barcode.rawValue
-                        Toast.makeText(this, "QR Code: $qrCodeData", Toast.LENGTH_SHORT).show()
-                        cameraProvider.unbindAll() // QR 코드가 스캔되면 카메라 정지
+                        if (qrCodeData != null) {
+                            handleQRCodeData(qrCodeData) // QR 코드 데이터 처리
+                            // QR 코드가 감지되면 카메라를 숨기고 중지
+                            previewView.visibility = View.GONE
+                            cameraProvider.unbindAll()
+                        }
                         break // 첫 번째 QR 코드만 처리하고 중지
                     }
                 }
@@ -143,6 +172,13 @@ class Delivery : AppCompatActivity() {
         }
     }
 
+    // QR 코드 데이터를 처리하여 RecyclerView 아이템의 체크 상태 업데이트
+    private fun handleQRCodeData(productName: String) {
+        dispatchAdapter.updateItemCheckStatus(productName) // 어댑터의 체크 상태 업데이트 메서드 호출
+        Toast.makeText(this, "QR Code: $productName 확인됨", Toast.LENGTH_SHORT).show()
+        Log.d("myLog", "QR Code matched with item: $productName")
+    }
+
     // 카메라 권한 요청 결과 처리
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -151,7 +187,7 @@ class Delivery : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startCamera() // 카메라 권한 허용 시 카메라 시작
+            toggleCameraPreviewVisibility() // 카메라 권한 허용 시 카메라 프리뷰 표시
         } else {
             Toast.makeText(this, "Camera permission is required to scan QR code", Toast.LENGTH_SHORT).show()
         }
