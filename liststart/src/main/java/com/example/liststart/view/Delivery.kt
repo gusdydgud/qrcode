@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +42,9 @@ class Delivery : AppCompatActivity() {
     private lateinit var dispatchRecyclerView: RecyclerView
     private var warehouseNo: Int = 0 // 전달받을 창고 번호
 
+    // 출고를 담당할 텍스트뷰
+    private lateinit var selectWarehouseTextView: TextView
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,11 +70,51 @@ class Delivery : AppCompatActivity() {
         dispatchAdapter = DispatchAdapter(emptyList())
         dispatchRecyclerView.adapter = dispatchAdapter
 
+        // selectWarehouseTextView 초기화
+        selectWarehouseTextView = findViewById(R.id.selectWarehouseTextView)
+        selectWarehouseTextView.isEnabled = false // 초기에는 비활성화
+        selectWarehouseTextView.isClickable = false // 클릭 불가능 상태
+
+        // selectWarehouseTextView 클릭 이벤트 처리
+        selectWarehouseTextView.setOnClickListener {
+            if (dispatchAdapter.allItemsChecked()) {
+                // 모든 아이템이 체크된 경우
+                val dispatchNos = dispatchAdapter.getDispatchNos()
+                dispatchViewModel.updateDispatch(dispatchNos)
+            } else {
+                // 체크되지 않은 아이템이 있는 경우
+                Toast.makeText(this, "모든 상품을 스캔해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
         // ViewModel을 통해 Dispatch 리스트 데이터를 관찰하고 UI 업데이트
         observeDispatchList()
-        dispatchViewModel.loadDispatchList(warehouseNo) // 서버에서 Dispatch 데이터 로드
-    }
+        dispatchViewModel.loadDispatchList(warehouseNo) // 서버에서 Dispatch 데이터
 
+        // 아이템 체크 상태 변경 시 selectWarehouseTextView 상태 업데이트
+        dispatchAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                super.onChanged()
+                updateSelectWarehouseTextViewState()
+            }
+
+            override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+                super.onItemRangeChanged(positionStart, itemCount)
+                updateSelectWarehouseTextViewState()
+            }
+        })
+
+        // 출고 업데이트 결과 관찰
+        dispatchViewModel.updateResult.observe(this) { success ->
+            if (success) {
+                Toast.makeText(this, "출고 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                finish() // 액티비티 종료 또는 데이터 갱신
+            } else {
+                Toast.makeText(this, "출고 처리에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     // Dispatch 리스트 데이터 관찰하여 RecyclerView에 적용
     private fun observeDispatchList() {
         dispatchViewModel.dispatchList.observe(this) { dispatchList ->
@@ -82,6 +126,14 @@ class Delivery : AppCompatActivity() {
                 Toast.makeText(this, "데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    // selectWarehouseTextView의 상태를 업데이트하는 함수
+    private fun updateSelectWarehouseTextViewState() {
+        val allChecked = dispatchAdapter.allItemsChecked()
+        selectWarehouseTextView.isEnabled = allChecked
+        selectWarehouseTextView.isClickable = allChecked
+        selectWarehouseTextView.alpha = if (allChecked) 1.0f else 0.5f // 시각적으로 비활성화 상태 표현
     }
 
     // 카메라 권한 확인 및 스캐너 열기
@@ -196,4 +248,7 @@ class Delivery : AppCompatActivity() {
     companion object {
         private const val CAMERA_REQUEST_CODE = 1001 // 카메라 권한 요청 코드 상수
     }
+
+
+
 }

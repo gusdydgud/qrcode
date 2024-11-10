@@ -59,4 +59,16 @@ class DispatchAdapter(private var dispatchList: List<AndroidDispatchDTO>) : Recy
             Log.d("myLog", "Item '$productName' not found in the list")
         }
     }
+
+    // 출고 상태 업데이트 관련
+    // 모든 아이템이 체크되었는지 확인하는 메서드
+    fun allItemsChecked(): Boolean {
+        return dispatchList.all { it.isChecked }
+    }
+
+    // 모든 dispatchNo를 가져오는 메서드
+    fun getDispatchNos(): List<Int> {
+        return dispatchList.mapNotNull { it.dispatchNo }
+    }
+
 }
