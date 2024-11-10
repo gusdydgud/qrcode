@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object QRConstants {
 
-    private const val BASE_URL = "http://10.0.2.2:8787/dispatch/api/" // 변경된 IP 주소
+    private const val BASE_URL = "http://172.30.1.55:8787/android/api/" // 변경된 IP 주소
 
     // GSON 인스턴스 (setLenient 추가)
     private val gson = GsonBuilder()
@@ -21,7 +21,7 @@ object QRConstants {
 
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BASE_URL) // '/'로 끝나는지 확인
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }

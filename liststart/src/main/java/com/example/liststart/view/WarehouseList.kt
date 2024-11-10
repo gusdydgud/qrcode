@@ -2,6 +2,7 @@ package com.example.liststart.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import com.example.liststart.R
@@ -28,6 +29,7 @@ class WarehouseList : AppCompatActivity() {
     private fun openDeliveryActivity(warehouseNo: Int) {
         val intent = Intent(this, Delivery::class.java)
         intent.putExtra("warehouse_no", warehouseNo)
+        Log.d("myLog", "Selected warehouseNo: $warehouseNo")  // 추가된 로그
         startActivity(intent)
     }
 }

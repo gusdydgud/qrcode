@@ -1,39 +1,45 @@
 package com.example.liststart.adapter
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.liststart.R
-import com.example.liststart.model.AndroidDispatchDTO
+import com.example.liststart.model.AndroidDispatchDTO // 데이터 모델
 
-class DispatchAdapter(
-    private var dispatchList: List<AndroidDispatchDTO>
-) : RecyclerView.Adapter<DispatchAdapter.DispatchViewHolder>() {
+// RecyclerView Adapter for displaying dispatch items
+class DispatchAdapter(private var dispatchList: List<AndroidDispatchDTO>) : RecyclerView.Adapter<DispatchAdapter.DispatchViewHolder>() {
 
-    // 데이터 갱신을 위한 메서드 추가
-    fun updateData(newDispatchList: List<AndroidDispatchDTO>) {
-        dispatchList = newDispatchList
-        notifyDataSetChanged()
+    // ViewHolder class to hold references to each item view's components
+    inner class DispatchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val productName: TextView = itemView.findViewById(R.id.warehouseItemName) // Product name TextView
+        val productQuantity: TextView = itemView.findViewById(R.id.warehouseItemDescription) // Product quantity TextView
     }
 
+    // Create ViewHolder by inflating item layout
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DispatchViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_warehouse, parent, false)
         return DispatchViewHolder(view)
     }
 
+    // Bind data to each item view
     override fun onBindViewHolder(holder: DispatchViewHolder, position: Int) {
-        val dispatch = dispatchList[position]
-        holder.productNameTextView.text = dispatch.productNm ?: "Unknown"
-        holder.orderQuantityTextView.text = "${dispatch.orderDQty ?: 0}개"
+        val item = dispatchList[position]
+        holder.productName.text = item.productNm // Set product name
+        holder.productQuantity.text = "${item.orderDQty}개" // Set product quantity with "개" suffix
     }
 
-    override fun getItemCount() = dispatchList.size
+    // Return total item count
+    override fun getItemCount(): Int = dispatchList.size
 
-    inner class DispatchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val productNameTextView: TextView = view.findViewById(R.id.warehouseItemName)
-        val orderQuantityTextView: TextView = view.findViewById(R.id.warehouseItemDescription)
-
+    // Method to update data and refresh RecyclerView
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newList: List<AndroidDispatchDTO>) {
+        dispatchList = newList
+        notifyDataSetChanged()
+        Log.d("myLog", "Adapter data updated with ${newList.size} items")
     }
 }
