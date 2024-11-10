@@ -94,6 +94,9 @@
             android:layout_gravity="center"
             android:textColor="@android:color/white"
             android:textSize="15sp"
+            android:enabled="false"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             />
 
 

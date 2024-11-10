@@ -15,7 +15,11 @@ class DispatchViewModel(private val dataSource: DispatchDataSource) : ViewModel(
     private val _dispatchList = MutableLiveData<List<AndroidDispatchDTO>>()
     val dispatchList: LiveData<List<AndroidDispatchDTO>> = _dispatchList
 
-    // 서버에서 데이터 로드
+    // 출고 상태 업데이트 결과를 저장할 LiveData
+    private val _updateResult = MutableLiveData<Boolean>()
+    val updateResult: LiveData<Boolean> get() = _updateResult
+
+    // 서버에서 Dispatch 데이터 로드
     fun loadDispatchList(warehouseNo: Int) {
         Log.d("myLog", "loadDispatchList called with warehouseNo: $warehouseNo")
         viewModelScope.launch {
@@ -29,4 +33,27 @@ class DispatchViewModel(private val dataSource: DispatchDataSource) : ViewModel(
             }
         }
     }
+
+    // 출고 상태를 업데이트하는 메서드
+    fun updateDispatch(dispatchNos: List<Int>) {
+        viewModelScope.launch {
+            try {
+                var allSuccessful = true
+                for (dispatchNo in dispatchNos) {
+                    val response = dataSource.updateDispatch(dispatchNo)
+                    if (!response.isSuccessful) {
+                        allSuccessful = false
+                        Log.e("DispatchViewModel", "Failed to update dispatchNo: $dispatchNo")
+                        break
+                    }
+                }
+                _updateResult.postValue(allSuccessful)
+            } catch (e: Exception) {
+                _updateResult.postValue(false)
+                Log.e("DispatchViewModel", "Error updating dispatch status", e)
+            }
+        }
+    }
+
+
 }
