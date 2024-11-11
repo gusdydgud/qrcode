@@ -16,12 +16,15 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.liststart.R
 import com.example.liststart.adapter.DispatchAdapter
 import com.example.liststart.viewmodel.DispatchViewModel
 import com.example.liststart.datasource.DataSourceProvider
+import com.example.liststart.fragments.SettingsFragment
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 
@@ -45,6 +48,8 @@ class Delivery : AppCompatActivity() {
     // 출고를 담당할 텍스트뷰
     private lateinit var selectWarehouseTextView: TextView
     private lateinit var warehouseIcon: ImageView
+    private lateinit var navImage2: ImageView // 프래그먼트 전환 버튼
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +85,14 @@ class Delivery : AppCompatActivity() {
         warehouseIcon = findViewById(R.id.warehouseIcon)
         warehouseIcon.isEnabled = false
         warehouseIcon.isClickable = false
+
+        // navImage2 버튼 초기화 및 클릭 리스너 설정
+        navImage2 = findViewById(R.id.navImage2)
+        navImage2.setOnClickListener {
+            openSettingsFragment()
+        }
+
+
         // selectWarehouseTextView 클릭 이벤트 처리
         selectWarehouseTextView.setOnClickListener {
             if (dispatchAdapter.allItemsChecked()) {
@@ -91,7 +104,6 @@ class Delivery : AppCompatActivity() {
                 Toast.makeText(this, "모든 상품을 스캔해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         // ViewModel을 통해 Dispatch 리스트 데이터를 관찰하고 UI 업데이트
         observeDispatchList()
@@ -120,6 +132,19 @@ class Delivery : AppCompatActivity() {
             }
         }
     }
+
+    // 프래그먼트 전환 메서드
+    private fun openSettingsFragment() {
+        val settingsFragment = SettingsFragment() // 전환할 프래그먼트 인스턴스 생성
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, settingsFragment) // fragment_container에 SettingsFragment를 넣음
+            .addToBackStack(null) // 뒤로 가기 기능을 위해 백스택에 추가
+            .commit()
+
+        // 프래그먼트가 표시되도록 설정
+        findViewById<View>(R.id.fragment_container).visibility = View.VISIBLE
+    }
+
     // Dispatch 리스트 데이터 관찰하여 RecyclerView에 적용
     private fun observeDispatchList() {
         dispatchViewModel.dispatchList.observe(this) { dispatchList ->
@@ -143,13 +168,14 @@ class Delivery : AppCompatActivity() {
         selectWarehouseTextView.alpha = if (allChecked) 1.0f else 0.5f // 시각적으로 비활성화 상태 표현
         warehouseIcon.alpha = if (allChecked) 1.0f else 0.5f
     }
+
     // 창고 번호에 따라 창고 이름 반환
-    private fun getWarehouseTitle(warehouseNo:Int):String{
-        return when (warehouseNo){
-            3-> "금일 출고 목록(본사 창고)"
-            2-> "금일 출고 목록(인천 창고)"
-            1-> "금일 출고 목록(부산 창고)"
-            4-> "금일 출고 목록(천안 창고)"
+    private fun getWarehouseTitle(warehouseNo: Int): String {
+        return when (warehouseNo) {
+            3 -> "금일 출고 목록(본사 창고)"
+            2 -> "금일 출고 목록(인천 창고)"
+            1 -> "금일 출고 목록(부산 창고)"
+            4 -> "금일 출고 목록(천안 창고)"
             else -> "금일 출고 목록"
         }
     }
@@ -266,7 +292,4 @@ class Delivery : AppCompatActivity() {
     companion object {
         private const val CAMERA_REQUEST_CODE = 1001 // 카메라 권한 요청 코드 상수
     }
-
-
-
 }
