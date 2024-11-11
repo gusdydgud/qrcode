@@ -144,6 +144,19 @@ class Delivery : AppCompatActivity() {
         // 프래그먼트가 표시되도록 설정
         findViewById<View>(R.id.fragment_container).visibility = View.VISIBLE
     }
+    override fun onBackPressed() {
+        // 백스택에 프래그먼트가 있는지 확인
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            // 프래그먼트가 있을 경우 뒤로 가기
+            supportFragmentManager.popBackStack()
+            // 프래그먼트가 제거된 후 컨테이너를 숨김
+            findViewById<View>(R.id.fragment_container).visibility = View.GONE
+        } else {
+            // 백스택에 프래그먼트가 없으면 기본 동작 (액티비티 종료 또는 이전 화면)
+            super.onBackPressed()
+        }
+    }
+
 
     // Dispatch 리스트 데이터 관찰하여 RecyclerView에 적용
     private fun observeDispatchList() {
