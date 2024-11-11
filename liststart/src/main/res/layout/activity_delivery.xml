@@ -9,6 +9,14 @@
     android:background="@android:color/white"
     tools:context=".view.Delivery">
 
+    <!-- 프래그먼트를 전체 화면에 표시할 영역 -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!-- 기존의 화면 내용 -->
     <!-- 상단 로고 이미지 -->
     <ImageView
         android:id="@+id/logoImageView"
@@ -53,11 +61,13 @@
             android:src="@drawable/ic_scan"
             android:layout_gravity="center" />
     </LinearLayout>
+
     <androidx.camera.view.PreviewView
         android:id="@+id/cameraPreviewView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
     <!-- RecyclerView for displaying multiple items -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/warehouseRecyclerView"
@@ -68,24 +78,20 @@
         android:layout_marginBottom="20dp"
         tools:listitem="@layout/item_warehouse" />
 
-
+    <!-- 출고 버튼 -->
     <LinearLayout
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:background="@drawable/rounded_button"
-
-
-        android:layout_marginBottom="20dp"
-        >
+        android:layout_marginBottom="20dp">
 
         <ImageView
             android:id="@+id/warehouseIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:src="@drawable/ic_truck" />
 
-            android:src="@drawable/ic_truck"
-            />
         <TextView
             android:id="@+id/selectWarehouseTextView"
             android:layout_width="wrap_content"
@@ -97,10 +103,7 @@
             android:textSize="15sp"
             android:enabled="false"
             android:clickable="true"
-            android:background="?attr/selectableItemBackground"
-            />
-
-
+            android:background="?attr/selectableItemBackground" />
     </LinearLayout>
 
     <!-- 하단 네비게이션 바 -->
@@ -114,7 +117,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#000000" /> <!-- 검정색 가로 구분선 -->
+            android:background="#000000" />
 
         <!-- 버튼 영역 -->
         <LinearLayout
@@ -132,15 +135,13 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <!-- 선택 표시를 위한 파란색 선 -->
                 <View
                     android:id="@+id/leftIndicator"
                     android:layout_width="50dp"
                     android:layout_height="5dp"
                     android:background="#B30058A3"
-                    android:visibility="visible" /> <!-- 기본적으로 숨김 -->
+                    android:visibility="visible" />
 
-                <!-- 아이콘 -->
                 <ImageView
                     android:id="@+id/navImage1"
                     android:layout_width="wrap_content"
@@ -152,11 +153,10 @@
                     android:scaleType="centerInside" />
             </LinearLayout>
 
-            <!-- 버튼 사이 세로 구분선 -->
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#000000" /> <!-- 검정색 세로 구분선 -->
+                android:background="#000000" />
 
             <!-- 두 번째 이미지 버튼 (설정) -->
             <LinearLayout
@@ -166,15 +166,13 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <!-- 선택 표시를 위한 파란색 선 -->
                 <View
                     android:id="@+id/rightIndicator"
                     android:layout_width="50dp"
                     android:layout_height="6dp"
                     android:background="#B30058A3"
-                    android:visibility="gone" /> <!-- 기본적으로 숨김 -->
+                    android:visibility="gone" />
 
-                <!-- 아이콘 -->
                 <ImageView
                     android:id="@+id/navImage2"
                     android:layout_width="wrap_content"
@@ -187,7 +185,5 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-
 
 </LinearLayout>
