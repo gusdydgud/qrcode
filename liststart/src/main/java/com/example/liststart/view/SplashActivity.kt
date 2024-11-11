@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,7 +19,9 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         // 카메라 권한 확인 및 요청
-        checkCameraPermission()
+        Handler(Looper.getMainLooper()).postDelayed({
+            checkCameraPermission()
+        }, SPLASH_DELAY)
     }
 
     private fun checkCameraPermission() {
@@ -39,7 +43,7 @@ class SplashActivity : AppCompatActivity() {
                 goToNextActivity()
             } else {
                 // 권한이 거부된 경우 메시지 표시 및 앱 종료
-                Toast.makeText(this, "Camera permission is required to use this app.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "이앱 사용시 카메라 권한을 허용해 주세요", Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -53,5 +57,6 @@ class SplashActivity : AppCompatActivity() {
 
     companion object {
         private const val CAMERA_REQUEST_CODE = 1001
+        private const val SPLASH_DELAY = 2000L // 2초 지연 시간 (밀리초)
     }
 }

@@ -48,16 +48,16 @@ class DispatchAdapter(private var dispatchList: List<AndroidDispatchDTO>) : Recy
         Log.d("myLog", "Adapter data updated with ${newList.size} items")
     }
 
-    // QR 코드 스캔 결과로 특정 아이템의 체크 상태를 업데이트하는 메서드
+    // 특정 이름의 모든 아이템의 체크 상태를 업데이트하는 메서드
     fun updateItemCheckStatus(productName: String) {
-        val index = dispatchList.indexOfFirst { it.productNm == productName } // 상품명으로 아이템 찾기
-        if (index != -1) {
-            dispatchList[index].isChecked = true // 체크 상태 업데이트
-            notifyItemChanged(index) // 해당 아이템만 갱신
-            Log.d("myLog", "Item '$productName' checked")
-        } else {
-            Log.d("myLog", "Item '$productName' not found in the list")
+        var itemUpdated = false
+        dispatchList.forEach { item ->
+            if (item.productNm == productName) {
+                item.isChecked = true
+                itemUpdated = true
+            }
         }
+        if (itemUpdated) notifyDataSetChanged() // 데이터 변경 시 전체 리프레시
     }
 
     // 출고 상태 업데이트 관련

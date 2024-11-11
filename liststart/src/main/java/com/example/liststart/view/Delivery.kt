@@ -44,7 +44,7 @@ class Delivery : AppCompatActivity() {
 
     // 출고를 담당할 텍스트뷰
     private lateinit var selectWarehouseTextView: TextView
-
+    private lateinit var warehouseIcon: ImageView
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +53,9 @@ class Delivery : AppCompatActivity() {
         // 인텐트에서 창고 번호 받기
         warehouseNo = intent.getIntExtra("warehouse_no", 0)
         Log.d("myLog", "Received warehouseNo: $warehouseNo")  // 받은 창고 번호 로그
+
+        val warehouseNameTextView = findViewById<TextView>(R.id.warehouseName)
+        warehouseNameTextView.text = getWarehouseTitle(warehouseNo)
 
         // PreviewView 초기화 및 숨김 설정
         previewView = findViewById(R.id.cameraPreviewView)
@@ -74,7 +77,9 @@ class Delivery : AppCompatActivity() {
         selectWarehouseTextView = findViewById(R.id.selectWarehouseTextView)
         selectWarehouseTextView.isEnabled = false // 초기에는 비활성화
         selectWarehouseTextView.isClickable = false // 클릭 불가능 상태
-
+        warehouseIcon = findViewById(R.id.warehouseIcon)
+        warehouseIcon.isEnabled = false
+        warehouseIcon.isClickable = false
         // selectWarehouseTextView 클릭 이벤트 처리
         selectWarehouseTextView.setOnClickListener {
             if (dispatchAdapter.allItemsChecked()) {
@@ -119,8 +124,10 @@ class Delivery : AppCompatActivity() {
     private fun observeDispatchList() {
         dispatchViewModel.dispatchList.observe(this) { dispatchList ->
             if (dispatchList != null && dispatchList.isNotEmpty()) {
-                dispatchAdapter.updateData(dispatchList) // RecyclerView에 데이터 갱신
-                Log.d("myLog", "Dispatch list updated with ${dispatchList.size} items")
+                // 상품명을 기준으로 오름차순 정렬
+                val sortedList = dispatchList.sortedBy { it.productNm }
+                dispatchAdapter.updateData(sortedList) // 정렬된 데이터를 RecyclerView에 갱신
+                Log.d("myLog", "Dispatch list updated with ${sortedList.size} items")
             } else {
                 Log.e("myLog", "No data found or data is empty")
                 Toast.makeText(this, "데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
@@ -134,6 +141,17 @@ class Delivery : AppCompatActivity() {
         selectWarehouseTextView.isEnabled = allChecked
         selectWarehouseTextView.isClickable = allChecked
         selectWarehouseTextView.alpha = if (allChecked) 1.0f else 0.5f // 시각적으로 비활성화 상태 표현
+        warehouseIcon.alpha = if (allChecked) 1.0f else 0.5f
+    }
+    // 창고 번호에 따라 창고 이름 반환
+    private fun getWarehouseTitle(warehouseNo:Int):String{
+        return when (warehouseNo){
+            3-> "금일 출고 목록(본사 창고)"
+            2-> "금일 출고 목록(인천 창고)"
+            1-> "금일 출고 목록(부산 창고)"
+            4-> "금일 출고 목록(천안 창고)"
+            else -> "금일 출고 목록"
+        }
     }
 
     // 카메라 권한 확인 및 스캐너 열기
