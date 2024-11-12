@@ -12,4 +12,9 @@ interface DispatchAPIService {
 
     @POST("update/dispatch/complete/{dispatchNo}")
     suspend fun updateDispatch(@Path("dispatchNo") dispatchNo: Int): Response<Void>
+    @GET("get/dispatch/completed/{warehouseNo}/{daysAgo}")
+    suspend fun getDispatchAll(
+        @Path("warehouseNo") warehouseNo: Int,
+        @Path("daysAgo") daysAgo: Int
+    ): Response<List<AndroidDispatchDTO>>
 }

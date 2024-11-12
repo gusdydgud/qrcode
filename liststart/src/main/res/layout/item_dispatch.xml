@@ -1,0 +1,66 @@
+<!-- item_dispatch.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+
+    >
+
+
+
+    <!-- 리스트 항목 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <!-- 체크박스 아이콘 -->
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_checked"
+            android:layout_marginEnd="3dp"
+            android:layout_marginTop="2dp" />
+
+        <!-- 왼쪽 정보: 출고번호 -->
+        <TextView
+            android:id="@+id/dispatchNoTextView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="출고번호 : 1"
+            android:textSize="14sp"
+            android:textColor="#000000" />
+
+        <!-- 왼쪽 정보: 회사명 -->
+        <TextView
+            android:id="@+id/customerNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tech Innovators"
+            android:textSize="12sp"
+            android:textColor="#083D80" />
+
+        <!-- 오른쪽 정보: 상품명 -->
+        <TextView
+            android:id="@+id/productNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="검정색 의자"
+            android:textSize="12sp"
+            android:textColor="#000000" />
+
+        <!-- 오른쪽 정보: 수량 -->
+        <TextView
+            android:id="@+id/quantityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100개"
+            android:textSize="12sp"
+            android:gravity="end"
+            android:textColor="#083D80" />
+    </LinearLayout>
+</LinearLayout>

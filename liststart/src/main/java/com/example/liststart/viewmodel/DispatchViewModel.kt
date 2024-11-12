@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.liststart.datasource.DispatchDataSource
 import com.example.liststart.model.AndroidDispatchDTO
-
 import kotlinx.coroutines.launch
 
 class DispatchViewModel(private val dataSource: DispatchDataSource) : ViewModel() {
@@ -15,45 +14,55 @@ class DispatchViewModel(private val dataSource: DispatchDataSource) : ViewModel(
     private val _dispatchList = MutableLiveData<List<AndroidDispatchDTO>>()
     val dispatchList: LiveData<List<AndroidDispatchDTO>> = _dispatchList
 
-    // 출고 상태 업데이트 결과를 저장할 LiveData
+    private val _doneDispatchList1Day = MutableLiveData<List<AndroidDispatchDTO>>()
+    val doneDispatchList1Day: LiveData<List<AndroidDispatchDTO>> = _doneDispatchList1Day
+
+    private val _doneDispatchList2Days = MutableLiveData<List<AndroidDispatchDTO>>()
+    val doneDispatchList2Days: LiveData<List<AndroidDispatchDTO>> = _doneDispatchList2Days
+
+    private val _doneDispatchList3Days = MutableLiveData<List<AndroidDispatchDTO>>()
+    val doneDispatchList3Days: LiveData<List<AndroidDispatchDTO>> = _doneDispatchList3Days
+
     private val _updateResult = MutableLiveData<Boolean>()
     val updateResult: LiveData<Boolean> get() = _updateResult
 
-    // 서버에서 Dispatch 데이터 로드
+    // 일반 출고 목록 로드
     fun loadDispatchList(warehouseNo: Int) {
-        Log.d("myLog", "loadDispatchList called with warehouseNo: $warehouseNo")
         viewModelScope.launch {
             val response = dataSource.getDispatchList(warehouseNo)
-            if (response.isSuccessful) {
-                _dispatchList.value = response.body()
-                Log.d("myLog", "Data loaded successfully: ${response.body()}")
-            } else {
-                _dispatchList.value = emptyList()
-                Log.e("myLog", "Failed to load data: ${response.errorBody()?.string()}")
-            }
+            _dispatchList.value = response.body() ?: emptyList()
         }
     }
 
-    // 출고 상태를 업데이트하는 메서드
+    // 완료된 출고 목록 로드
+    fun loadDoneDispatchList(warehouseNo: Int) {
+        viewModelScope.launch {
+            loadDoneDispatchForDaysAgo(warehouseNo, 1, _doneDispatchList1Day)
+            loadDoneDispatchForDaysAgo(warehouseNo, 2, _doneDispatchList2Days)
+            loadDoneDispatchForDaysAgo(warehouseNo, 3, _doneDispatchList3Days)
+        }
+    }
+
+    private suspend fun loadDoneDispatchForDaysAgo(
+        warehouseNo: Int,
+        daysAgo: Int,
+        liveData: MutableLiveData<List<AndroidDispatchDTO>>
+    ) {
+        val response = dataSource.getHistroy(warehouseNo, daysAgo)
+        liveData.value = response.body() ?: emptyList()
+    }
+
     fun updateDispatch(dispatchNos: List<Int>) {
         viewModelScope.launch {
-            try {
-                var allSuccessful = true
-                for (dispatchNo in dispatchNos) {
-                    val response = dataSource.updateDispatch(dispatchNo)
-                    if (!response.isSuccessful) {
-                        allSuccessful = false
-                        Log.e("DispatchViewModel", "Failed to update dispatchNo: $dispatchNo")
-                        break
-                    }
+            var allSuccessful = true
+            for (dispatchNo in dispatchNos) {
+                val response = dataSource.updateDispatch(dispatchNo)
+                if (!response.isSuccessful) {
+                    allSuccessful = false
+                    break
                 }
-                _updateResult.postValue(allSuccessful)
-            } catch (e: Exception) {
-                _updateResult.postValue(false)
-                Log.e("DispatchViewModel", "Error updating dispatch status", e)
             }
+            _updateResult.postValue(allSuccessful)
         }
     }
-
-
 }

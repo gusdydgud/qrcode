@@ -135,13 +135,12 @@ class Delivery : AppCompatActivity() {
 
     // 프래그먼트 전환 메서드
     private fun openSettingsFragment() {
-        val settingsFragment = SettingsFragment() // 전환할 프래그먼트 인스턴스 생성
+        val settingsFragment = SettingsFragment(warehouseNo)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, settingsFragment) // fragment_container에 SettingsFragment를 넣음
-            .addToBackStack(null) // 뒤로 가기 기능을 위해 백스택에 추가
+            .replace(R.id.fragment_container, settingsFragment)
+            .addToBackStack(null)
             .commit()
 
-        // 프래그먼트가 표시되도록 설정
         findViewById<View>(R.id.fragment_container).visibility = View.VISIBLE
     }
     override fun onBackPressed() {

@@ -19,6 +19,7 @@ class DispatchAdapter(private var dispatchList: List<AndroidDispatchDTO>) : Recy
         val productName: TextView = itemView.findViewById(R.id.warehouseItemName) // 상품명 텍스트뷰
         val productQuantity: TextView = itemView.findViewById(R.id.warehouseItemDescription) // 수량 텍스트뷰
         val checkBox: ImageView = itemView.findViewById(R.id.warehouseItemCheckBox) // 체크박스 이미지뷰
+        val customer: TextView = itemView.findViewById(R.id.customer)
     }
 
     // ViewHolder를 생성하여 아이템 레이아웃을 인플레이트
@@ -32,6 +33,7 @@ class DispatchAdapter(private var dispatchList: List<AndroidDispatchDTO>) : Recy
         val item = dispatchList[position]
         holder.productName.text = item.productNm // 상품명 설정
         holder.productQuantity.text = "${item.orderDQty}개" // 수량 설정
+        holder.customer.text = item.customerName
 
         // 체크 상태에 따라 체크박스 이미지 업데이트
         holder.checkBox.setImageResource(if (item.isChecked) R.drawable.ic_checked else R.drawable.ic_unchecked)

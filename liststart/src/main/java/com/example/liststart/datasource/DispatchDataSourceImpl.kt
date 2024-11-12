@@ -10,6 +10,11 @@ class DispatchDataSourceImpl(private val apiService: DispatchAPIService) : Dispa
     override suspend fun getDispatchList(warehouseNo: Int): Response<List<AndroidDispatchDTO>> {
         return apiService.getDispatchAll(warehouseNo)
     }
+
+    override suspend fun getHistroy(warehouseNo: Int, daysAgo: Int): Response<List<AndroidDispatchDTO>> {
+        return apiService.getDispatchAll(warehouseNo, daysAgo)
+    }
+
     override suspend fun updateDispatch(dispatchNo: Int): Response<Void> {
         return apiService.updateDispatch(dispatchNo)
     }
