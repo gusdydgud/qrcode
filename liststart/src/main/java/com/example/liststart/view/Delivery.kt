@@ -159,18 +159,27 @@ class Delivery : AppCompatActivity() {
 
     // Dispatch 리스트 데이터 관찰하여 RecyclerView에 적용
     private fun observeDispatchList() {
+        val emptyTextView = findViewById<TextView>(R.id.emptyTextView1) // emptyTextView1 연결
+
         dispatchViewModel.dispatchList.observe(this) { dispatchList ->
             if (dispatchList != null && dispatchList.isNotEmpty()) {
                 // 상품명을 기준으로 오름차순 정렬
                 val sortedList = dispatchList.sortedBy { it.productNm }
                 dispatchAdapter.updateData(sortedList) // 정렬된 데이터를 RecyclerView에 갱신
                 Log.d("myLog", "Dispatch list updated with ${sortedList.size} items")
+
+                // 데이터가 있을 때는 emptyTextView를 숨김
+                emptyTextView.visibility = View.GONE
             } else {
                 Log.e("myLog", "No data found or data is empty")
-                Toast.makeText(this, "데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+
+                // 데이터가 없을 때 emptyTextView를 보이게 설정
+                emptyTextView.visibility = View.VISIBLE
             }
         }
     }
+
+
 
     // selectWarehouseTextView의 상태를 업데이트하는 함수
     private fun updateSelectWarehouseTextViewState() {
@@ -184,11 +193,11 @@ class Delivery : AppCompatActivity() {
     // 창고 번호에 따라 창고 이름 반환
     private fun getWarehouseTitle(warehouseNo: Int): String {
         return when (warehouseNo) {
-            3 -> "금일 출고 목록(본사 창고)"
-            2 -> "금일 출고 목록(인천 창고)"
-            1 -> "금일 출고 목록(부산 창고)"
-            4 -> "금일 출고 목록(천안 창고)"
-            else -> "금일 출고 목록"
+            1 -> "※ 금일 출고 목록(부산 창고) ※"
+            2 -> "※ 금일 출고 목록(인천 창고) ※"
+            3 -> "※ 금일 출고 목록(본사 창고) ※"
+            4 -> "※ 금일 출고 목록(천안 창고) ※"
+            else -> "※ 금일 출고 목록 ※"
         }
     }
 
